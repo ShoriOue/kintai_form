@@ -4,7 +4,7 @@ import logging
 import datetime
 import base64
 import requests
-from urllib.parse import parse_qs
+from requests.compat import parse_qs
 
 # 環境変数の設定
 SLACK_BOT_TOKEN = os.environ['SLACK_BOT_TOKEN']
