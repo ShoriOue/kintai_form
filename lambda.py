@@ -191,7 +191,7 @@ def send_webhook_notification(user, date, report_type, details):
     return response.text
 
 def send_completion_message(user_id, date, report_type):
-    """ユーザーにダイレクトメッセージで完了通知を送信する"""
+    # ユーザーにダイレクトメッセージで完了通知を送信する
     message = {
         "channel": user_id,
         "text": "勤怠報告が正常に送信されました。"
