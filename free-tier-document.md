@@ -2,7 +2,7 @@
 
 ## 1. AWS無料利用枠（Free Tier）の概要
 
-AWS LambdaとAPI Gatewayには無料利用枠があり、小規模な勤怠システムであれば無料で運用できる可能性が高いです。
+AWS LambdaとAPI Gatewayには無料利用枠があり、小規模な勤怠システムであれば無料で運用できる
 
 ### 1.1 AWS Lambda無料枠
 - **無料枠**: 毎月100万リクエスト＋400,000GB秒のコンピューティング時間
@@ -42,5 +42,3 @@ AWS LambdaとAPI Gatewayには無料利用枠があり、小規模な勤怠シ�
     - `im:write`（DMの送信）
     - `commands`（スラッシュコマンド）
   - 無料で利用可能
-
-
