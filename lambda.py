@@ -70,7 +70,7 @@ def handle_slash_command(body):
 
 def open_modal(trigger_id):
     # モーダルフォームを定義する
-    today = datetime.date.today().strftime("%Y-%m-%d")
+    today = (datetime.datetime.now() + datetime.timedelta(hours=9)).strftime("%Y-%m-%d")
     
     modal = {
         "trigger_id": trigger_id,
