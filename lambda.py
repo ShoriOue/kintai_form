@@ -84,7 +84,7 @@ def open_modal(trigger_id):
                 {
                     "type": "section",
                     "block_id": "date_block",
-                    "text": {"type": "mrkdwn", "text": "*日付*"},
+                    "text": {"type": "mrkdwn", "text": "*取得日*"},
                     "accessory": {
                         "type": "datepicker",
                         "action_id": "date_picker",
@@ -161,6 +161,9 @@ def handle_submission(payload):
     }
 
 def send_webhook_notification(user, date, report_type, details):
+    # 申請日（現在の日時）を取得
+    submit_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+    
     message = {
         "blocks": [
             {
@@ -174,7 +177,8 @@ def send_webhook_notification(user, date, report_type, details):
                 "type": "section",
                 "fields": [
                     {"type": "mrkdwn", "text": f"*提出者:*\n{user}"},
-                    {"type": "mrkdwn", "text": f"*日付:*\n{date}"},
+                    {"type": "mrkdwn", "text": f"*申請日:*\n{submit_date}"},
+                    {"type": "mrkdwn", "text": f"*取得日:*\n{date}"},
                     {"type": "mrkdwn", "text": f"*報告種類:*\n{report_type}"},
                     {"type": "mrkdwn", "text": f"*詳細:*\n{details}"}
                 ]
