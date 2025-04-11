@@ -108,7 +108,7 @@ def open_modal(trigger_id):
                             {"text": {"type": "plain_text", "text": "有給休暇(全休)"}, "value": "paid_leave"},
                             {"text": {"type": "plain_text", "text": "有給休暇(午前休)"}, "value": "paid_leave_am"},
                             {"text": {"type": "plain_text", "text": "有給休暇(午後休)"}, "value": "paid_leave_pm"},
-                            {"text": {"type": "plain_text", "text": "特別休暇"}, "value": "sick"},
+                            {"text": {"type": "plain_text", "text": "特別休暇"}, "value": "special_leave"},
                             {"text": {"type": "plain_text", "text": "欠勤"}, "value": "absent"},
                             {"text": {"type": "plain_text", "text": "その他"}, "value": "other"}
                         ]
