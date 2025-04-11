@@ -27,7 +27,7 @@ def lambda_handler(event, context):
             'body': json.dumps('Invalid request')
         }
     
-    print(event)
+    logger.debug(event)
 
     body = event['body']
 
@@ -37,7 +37,7 @@ def lambda_handler(event, context):
     # リクエストのボディをパース
     body = parse_qs(body) if isinstance(body, str) else body
 
-    print(body)
+    logger.debug(body)
 
     # スラッシュコマンドの処理
     if 'command' in body and body['command'][0] == '/kintai':
@@ -101,10 +101,15 @@ def open_modal(trigger_id):
                         "action_id": "report_type",
                         "placeholder": {"type": "plain_text", "text": "報告種類を選択"},
                         "options": [
+                            {"text": {"type": "plain_text", "text": "体調不良"}, "value": "sick"},
                             {"text": {"type": "plain_text", "text": "遅刻"}, "value": "late"},
                             {"text": {"type": "plain_text", "text": "早退"}, "value": "early_leave"},
-                            {"text": {"type": "plain_text", "text": "有給休暇"}, "value": "paid_leave"},
-                            {"text": {"type": "plain_text", "text": "体調不良"}, "value": "sick"},
+                            {"text": {"type": "plain_text", "text": "遅刻+早退"}, "value": "late_early_leave"},
+                            {"text": {"type": "plain_text", "text": "有給休暇(全休)"}, "value": "paid_leave"},
+                            {"text": {"type": "plain_text", "text": "有給休暇(午前休)"}, "value": "paid_leave_am"},
+                            {"text": {"type": "plain_text", "text": "有給休暇(午後休)"}, "value": "paid_leave_pm"},
+                            {"text": {"type": "plain_text", "text": "特別休暇"}, "value": "special_leave"},
+                            {"text": {"type": "plain_text", "text": "欠勤"}, "value": "absent"},
                             {"text": {"type": "plain_text", "text": "その他"}, "value": "other"}
                         ]
                     },
@@ -162,7 +167,7 @@ def handle_submission(payload):
 
 def send_webhook_notification(user, date, report_type, details):
     # 申請日（現在の日時）を取得
-    submit_date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+    submit_date = (datetime.datetime.now() + datetime.timedelta(hours=9)).strftime("%Y-%m-%d %H:%M")
     
     message = {
         "blocks": [
