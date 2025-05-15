@@ -152,10 +152,17 @@ def handle_submission(payload):
     details = values['details_block']['details']['value'] if 'value' in values['details_block']['details'] else "詳細なし"
     
     # Webhook経由でSlackチャンネルに通知を送信
-    send_webhook_notification(user, date, report_type_text, details)
+    response = send_webhook_notification(user, date, report_type_text, details)
     
-    # ユーザーに完了メッセージを送信
-    send_completion_message(user_id, date, report_type_text)
+    # Webhook送信の成否で分岐
+    if response is not None and response.status_code >= 200 and response.status_code < 300:
+        # ユーザーに完了メッセージを送信（detailsも渡す）
+        send_completion_message(user_id, date, report_type_text, details)
+    else:
+        # エラー時はSlackのレスポンス内容もログに記録
+        logger.error(f"Webhook送信エラー: {response.status_code if response else 'No Response'} - {response.text if response else 'No Response Text'}")
+        # エラー通知を送信
+        send_error_message(user_id)
     
     return {
         'statusCode': 200,
@@ -197,15 +204,26 @@ def send_webhook_notification(user, date, report_type, details):
         json=message,
         headers={'Content-Type': 'application/json'}
     )
-    return response.text
+    return response
 
-def send_completion_message(user_id, date, report_type):
-    # ユーザーにダイレクトメッセージで完了通知を送信する
+def send_completion_message(user_id, date, report_type, details):
     message = {
         "channel": user_id,
-        "text": "勤怠報告が正常に送信されました。"
+        "text": (
+            "勤怠報告が正常に送信されました。\n\n" +
+            f"取得日: {date}, " +
+            f"報告種類: {report_type}, " +
+            f"詳細: {details}"
+        )
     }
-    
+    call_slack_api("chat.postMessage", message)
+    return
+
+def send_error_message(user_id):
+    message = {
+        "channel": user_id,
+        "text": "勤怠報告の送信中にエラーが発生しました。管理者にご連絡ください。"
+    }
     call_slack_api("chat.postMessage", message)
     return
 
